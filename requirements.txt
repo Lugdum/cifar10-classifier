@@ -15,4 +15,5 @@ tqdm
 typer
 opencv-python
 scikit-image
+gdown
 -e .
