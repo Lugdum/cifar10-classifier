@@ -10,7 +10,7 @@ Bibliothèque pour classifier les données de CIFAR-10.
 
     ```bash
     git clone https://github.com/Lugdum/cifar10-classifier.git
-    cd cifar10_classification
+    cd cifar10-classifier
     ```
 
 2. Assurez-vous d'avoir `make` installé. Sur Ubuntu/Debian, vous pouvez l'installer avec :
