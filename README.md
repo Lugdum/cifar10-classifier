@@ -26,6 +26,14 @@ Bibliothèque pour classifier les données de CIFAR-10.
     source venv/bin/activate
     ```
 
+    **Remarque :** Le Makefile utilise `python3` comme interpréteur. Si votre système utilise `python` au lieu de `python3`, modifiez le Makefile en conséquence :
+
+    ```
+    PROJECT_NAME = cifar10_classification
+    PYTHON_VERSION = 3.10
+    PYTHON_INTERPRETER = python
+    ```
+
 Cette commande va :
 - Installer les dépendances listées dans `requirements.txt`.
 - Télécharger et extraire les données et les modèles nécessaires.
