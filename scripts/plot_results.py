@@ -1,4 +1,5 @@
-from cifar10_classification import plots, config
+from cifar10_classification import config, plots
+
 
 def main():
     plots.main(config.PROCESSED_DATA_DIR, config.MODELS_DIR, final=False)

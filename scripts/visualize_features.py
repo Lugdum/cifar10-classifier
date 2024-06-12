@@ -1,5 +1,7 @@
-from cifar10_classification import visualize_features, config
 import numpy as np
+
+from cifar10_classification import config, visualize_features
+
 
 def main():
     x_train_flat = np.load(config.PROCESSED_DATA_DIR / 'flattened' / 'train' / 'features.npy')

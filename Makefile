@@ -14,9 +14,9 @@ PYTHON_INTERPRETER = python
 ## Install Python Dependencies
 .PHONY: requirements
 requirements: create_environment
-	$(PYTHON_INTERPRETER) -m pip install -U pip
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
-	$(PYTHON_INTERPRETER) scripts/downloads.py
+	venv/bin/pip install -U pip
+	venv/bin/pip install -r requirements.txt
+	venv/bin/python scripts/downloads.py
 
 ## Delete all compiled Python files
 .PHONY: clean
@@ -27,14 +27,15 @@ clean:
 ## Lint using flake8 and black (use `make format` to do formatting)
 .PHONY: lint
 lint:
-	flake8 cifar10_classification
-	isort --check --diff --profile black cifar10_classification
-	black --check --config pyproject.toml cifar10_classification
+	venv/bin/flake8 cifar10_classification
+	venv/bin/isort --check --diff --profile black cifar10_classification
+	venv/bin/black --check --config pyproject.toml cifar10_classification
 
 ## Format source code with black
 .PHONY: format
 format:
-	black --config pyproject.toml cifar10_classification
+	venv/bin/isort --profile black cifar10_classification
+	venv/bin/black --config pyproject.toml cifar10_classification
 
 ## Set up python interpreter environment
 .PHONY: create_environment
@@ -47,10 +48,39 @@ create_environment:
 #################################################################################
 
 
-## Make Dataset
-.PHONY: data
-data: requirements
-	$(PYTHON_INTERPRETER) cifar10_classification/data/make_dataset.py
+## Prepare Data
+.PHONY: prepare_data
+prepare_data: requirements
+	venv/bin/python scripts/prepare_data.py
+
+## Extract Features
+.PHONY: extract_features
+extract_features: prepare_data
+	venv/bin/python scripts/extract_features.py
+
+## Visualize Features
+.PHONY: visualize_features
+visualize_features: extract_features
+	venv/bin/python scripts/visualize_features.py
+
+## Train Models
+.PHONY: train_models
+train_models: extract_features
+	venv/bin/python scripts/train_models.py
+
+## Evaluate Metrics
+.PHONY: evaluate_metrics
+evaluate_metrics: train_models
+	venv/bin/python scripts/evaluate_metrics.py
+
+## Plot Results
+.PHONY: plot_results
+plot_results: evaluate_metrics
+	venv/bin/python scripts/plot_results.py
+
+## Run All Steps
+.PHONY: all
+all: prepare_data extract_features visualize_features train_models evaluate_metrics plot_results
 
 #################################################################################
 # Self Documenting Commands                                                     #

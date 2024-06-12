@@ -1,27 +1,37 @@
-import os
-import numpy as np
-from sklearn.metrics import classification_report, accuracy_score, f1_score, precision_score, recall_score
-from joblib import load
 import logging
-from .config import PROCESSED_DATA_DIR, MODELS_DIR
+import os
+
+import numpy as np
+from joblib import load
+from sklearn.metrics import (
+    accuracy_score,
+    classification_report,
+    f1_score,
+    precision_score,
+    recall_score,
+)
+
+from .config import MODELS_DIR, PROCESSED_DATA_DIR
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 def load_data(processed_dir, method):
     feature_dir = os.path.join(processed_dir, method)
     logging.info(f"Loading data from {feature_dir}...")
-    x_test = np.load(os.path.join(feature_dir, 'test', 'features.npy'))
-    y_test = np.load(os.path.join(feature_dir, 'test', 'labels.npy'))
+    x_test = np.load(os.path.join(feature_dir, "test", "features.npy"))
+    y_test = np.load(os.path.join(feature_dir, "test", "labels.npy"))
     return x_test, y_test
+
 
 def evaluate_model(model, x_test, y_test, model_name, data_type):
     logging.info(f"Evaluating model {model_name} on {data_type} data...")
     y_pred = model.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred, average='weighted')
-    precision = precision_score(y_test, y_pred, average='weighted')
-    recall = recall_score(y_test, y_pred, average='weighted')
+    f1 = f1_score(y_test, y_pred, average="weighted")
+    precision = precision_score(y_test, y_pred, average="weighted")
+    recall = recall_score(y_test, y_pred, average="weighted")
 
     report = classification_report(y_test, y_pred)
     logging.info(f"Classification Report for {model_name} on {data_type}:\n{report}")
@@ -31,14 +41,15 @@ def evaluate_model(model, x_test, y_test, model_name, data_type):
     logging.info(f"Recall: {recall}")
 
     return {
-        'model': model_name,
-        'data_type': data_type,
-        'accuracy': accuracy,
-        'f1_score': f1,
-        'precision': precision,
-        'recall': recall,
-        'classification_report': report
+        "model": model_name,
+        "data_type": data_type,
+        "accuracy": accuracy,
+        "f1_score": f1,
+        "precision": precision,
+        "recall": recall,
+        "classification_report": report,
     }
+
 
 def main(processed_dir=PROCESSED_DATA_DIR, models_dir=MODELS_DIR, final=True):
     """
@@ -52,8 +63,8 @@ def main(processed_dir=PROCESSED_DATA_DIR, models_dir=MODELS_DIR, final=True):
     Returns:
     results (list): List of evaluation results for each model.
     """
-    methods = ['flattened', 'pca', 'hog']
-    classifiers = ['LogisticRegression', 'NaiveBayes', 'SVM', 'DummyClassifier']
+    methods = ["flattened", "pca", "hog"]
+    classifiers = ["LogisticRegression", "NaiveBayes", "SVM", "DummyClassifier"]
     results = []
 
     for method in methods:
@@ -74,6 +85,7 @@ def main(processed_dir=PROCESSED_DATA_DIR, models_dir=MODELS_DIR, final=True):
 
     return results
 
+
 if __name__ == "__main__":
     results = main()
     for result in results:
@@ -82,5 +94,5 @@ if __name__ == "__main__":
         print(f"F1 Score: {result['f1_score']:.4f}")
         print(f"Precision: {result['precision']:.4f}")
         print(f"Recall: {result['recall']:.4f}")
-        print(result['classification_report'])
-        print("="*80)
+        print(result["classification_report"])
+        print("=" * 80)

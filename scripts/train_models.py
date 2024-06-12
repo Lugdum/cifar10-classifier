@@ -1,4 +1,5 @@
-from cifar10_classification import train, config
+from cifar10_classification import config, train
+
 
 def main():
     train.run_training(config.PROCESSED_DATA_DIR, use_hyperparameter_search=False, subset_size=1000)

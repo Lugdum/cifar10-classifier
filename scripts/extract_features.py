@@ -1,5 +1,7 @@
-from cifar10_classification import features, config
 import numpy as np
+
+from cifar10_classification import config, features
+
 
 def main():
     x_train = np.load(config.INTERIM_DATA_DIR / 'x_train.npy')

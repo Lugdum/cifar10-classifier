@@ -1,5 +1,6 @@
 import subprocess
 
+
 def main():
     scripts = [
         "prepare_data.py",
